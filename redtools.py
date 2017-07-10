@@ -5,7 +5,7 @@ import os
 
 
 
-def reduc_tbl():
+def  reduc_tbl():
     '''
     This function iteratively opens and reads .fits files in a given directory and compiles a csv file containing 
     the filename, target name, reduction variables (bias and flat field) and observation filters for each file 
