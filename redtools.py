@@ -3,8 +3,6 @@ import pandas as pd
 import os
 
 
-
-
 def  reduc_tbl():
     '''
     This function iteratively opens and reads .fits files in a given directory and compiles a csv file containing 
@@ -30,7 +28,7 @@ def  reduc_tbl():
 
 
     path = os.path.expanduser(raw_input('Please enter the path to .fits files: \n\n'))
-    print(3*'\n\n' + path + 3*'\n\n')
+    print(2*'\n\n' + path + 3*'\n\n')
 	
     
     # Create empty lists for construction of data arrays by iterative appending.
@@ -39,7 +37,7 @@ def  reduc_tbl():
 
     for fitsfile in os.listdir(path):
         if fitsfile[-5:] == '.fits':
-            if len(os.listdir(path)) > 150:
+            if len(os.listdir(path)) > 200:
                 fileid   = [] * len(os.listdir(path))
                 objname  = [] * len(os.listdir(path))
                 obsvtype = [] * len(os.listdir(path))
@@ -64,31 +62,37 @@ def  reduc_tbl():
 
                     hdr = hdulist[0]
 					
+                    # local fits file name is used here; filename list not uniform across format
+
                     filename    = hdr.header['FILENAME']
-                    fileid.append(os.path.basename(os.path.normpath(filename)))
-                    print(filename)
-                    
+                    fileid.append(fitsfile)
+                    print(fitsfile)
+                    print('\n\n') 
+
                     object_name = hdr.header['OBJECT']
                     objname.append(object_name)
                     print(object_name)                    
-                    
+                    print('\n\n') 
+
                     obsvtyp     = hdr.header['OBSTYPE']
                     obsvtype.append(obsvtyp)
                     print(obsvtype)             
+                    print('\n\n') 
                     
                     filt        = hdr.header['FILTERS']
                     filtr.append(filt)
-                    print(filtr)                    
+                    print(filtr)
+                    print('\n\n')                    
                     
                     comment.append(' ')
                 
             except IOError:
-                print(os.path.basename(fitsfile) + ' is a  ** Bad file **')
+                print(fitsfile + ' is a  ** Bad file **')
                 fileid.append(str.format(fitsfile))
                 objname.append(' N/A ')
                 obsvtype.append(' N/A ')
                 filtr.append(' N/A ')
-                comment.append('Empty or corrupt FITS file.')       # \033[1;30;31m : ANSI color code for red text
+                comment.append('Empty or corrupt FITS file.')       # \033[01;31m : ANSI color code for red text
                 continue
          
         
@@ -102,7 +106,7 @@ def  reduc_tbl():
     dataframe = pd.DataFrame(data = None)
     dataframe['Filename']         = fileid     
     dataframe['Object_Name']      = objname    
-    dataframe['Observation_type'] = obsvtype   
+    dataframe['Observation_Type'] = obsvtype   
     dataframe['Filter']           = filtr 
     dataframe['Comment']          = comment     
 	
@@ -112,6 +116,8 @@ def  reduc_tbl():
     # Export compiled dataframe object to a .csv file in specified directory path.
 
 
-    dataframe.to_csv(path + 'reduc_tbl_result.csv',columns = ['Filename','Object_name',
+    dataframe.to_csv(path +  'observation_log.csv',columns = ['Filename','Object_Name',
         'Observation_Type','Filter','Comment'],index = None)
+
+
 
