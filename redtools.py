@@ -22,8 +22,10 @@ def  reduc_tbl():
     - .CSV file containing the filename, target name, reduction variables (bias and flat field) 
       and observation filters for each .fits file within specified directory.
     '''
-    
 
+    #*************************************************************************************************************#
+
+    
     # Prompt user input of directory path where files to be summarized are located.
 
 
@@ -62,7 +64,7 @@ def  reduc_tbl():
 
                     hdr = hdulist[0]
 					
-                    # local fits file name is used here; filename list not uniform across format
+                    # local fits file name is used here; filename list elements not uniform across format
 
                     filename    = hdr.header['FILENAME']
                     fileid.append(fitsfile)
@@ -109,15 +111,14 @@ def  reduc_tbl():
     dataframe['Observation_Type'] = obsvtype   
     dataframe['Filter']           = filtr 
     dataframe['Comment']          = comment     
-	
-    print(dataframe)
+	print(dataframe)
 	
 
     # Export compiled dataframe object to a .csv file in specified directory path.
 
 
-    dataframe.to_csv(path +  'observation_log.csv',columns = ['Filename','Object_Name',
-        'Observation_Type','Filter','Comment'],index = None)
+    dataframe.to_csv(path +  'observation_log.csv', columns = ['Filename',
+        'Object_Name', 'Observation_Type', 'Filter', 'Comment'], index = None)
 
 
 
