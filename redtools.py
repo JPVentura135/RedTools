@@ -28,8 +28,16 @@ def  reduc_tbl():
     
     # Prompt user input of directory path where files to be summarized are located.
 
-
     path = os.path.expanduser(raw_input('Please enter the path to .fits files: \n\n'))
+    
+
+    # Make sure pathname ends in '/' and if not then add on to the end of the path string. 
+
+    if path[-1] != '/':
+        path + '/'
+    else:
+        path = path    
+    
     print(2*'\n\n' + path + 3*'\n\n')
 	
     
@@ -111,8 +119,8 @@ def  reduc_tbl():
     dataframe['Observation_Type'] = obsvtype   
     dataframe['Filter']           = filtr 
     dataframe['Comment']          = comment     
-	print(dataframe)
-	
+    print(dataframe)
+
 
     # Export compiled dataframe object to a .csv file in specified directory path.
 
