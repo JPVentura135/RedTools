@@ -1,6 +1,8 @@
-import os
-import pandas as pd
 from astropy.io import fits
+import pandas as pd
+import os
+
+
 
 
 def reduc_tbl():
@@ -86,15 +88,16 @@ def reduc_tbl():
                 objname.append(' N/A ')
                 obsvtype.append(' N/A ')
                 filtr.append(' N/A ')
-                comment.append('Empty or corrupt FITS file.')
+                comment.append('Empty or corrupt FITS file.')       # \033[1;30;31m : ANSI color code for red text
                 continue
          
-    #\033[1;30;31m : ANSI color code for red text
-
+        
     print(fileid,objname,obsvtype,filtr,comment)
+
 
     # Create an empty pandas dataframe object (data table) and assign populated data lists to dataframe
     # columns.
+
 
     dataframe = pd.DataFrame(data = None)
     dataframe['Filename']         = fileid     
@@ -105,7 +108,9 @@ def reduc_tbl():
 	
     print(dataframe)
 	
+
     # Export compiled dataframe object to a .csv file in specified directory path.
+
 
     dataframe.to_csv(path + 'reduc_tbl_result.csv',columns = ['Filename','Object_name',
         'Observation_Type','Filter','Comment'],index = None)
