@@ -87,7 +87,7 @@ def  reduc_tbl():
                     comment.append(' ')
                 
             except IOError:
-                print(fitsfile + ' is a  ** Bad file **')
+                print(fitsfile + ' is a  ** Bad file ** \n\n')
                 fileid.append(str.format(fitsfile))
                 objname.append(' N/A ')
                 obsvtype.append(' N/A ')
