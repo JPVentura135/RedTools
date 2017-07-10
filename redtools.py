@@ -6,7 +6,8 @@ from astropy.io import fits
 def reduc_tbl():
     '''
     This function iteratively opens and reads .fits files in a given directory and compiles a csv file containing 
-    the filename, target name, reduction variables (bias and flat field) and observation filters for each file.
+    the filename, target name, reduction variables (bias and flat field) and observation filters for each file 
+    (observation log).
     
     ==========
     Arguments:
@@ -22,16 +23,33 @@ def reduc_tbl():
       and observation filters for each .fits file within specified directory.
     '''
     
+
     # Prompt user input of directory path where files to be summarized are located.
+
 
     path = os.path.expanduser(raw_input('Please enter the path to .fits files: \n\n'))
     print(3*'\n\n' + path + 3*'\n\n')
 	
-    fileid   = [] * len(os.listdir(path))
-    objname  = [] * len(os.listdir(path))
-    obsvtype = [] * len(os.listdir(path))
-    filtr    = [] * len(os.listdir(path))
-    comment  = [] * len(os.listdir(path))
+    
+    # Create empty lists for construction of data arrays by iterative appending.
+    # Initialize lists in the event of processing a large volume of files.
+
+
+    for fitsfile in os.listdir(path):
+        if fitsfile[-5:] == '.fits':
+            if len(os.listdir(path)) > 150:
+                fileid   = [] * len(os.listdir(path))
+                objname  = [] * len(os.listdir(path))
+                obsvtype = [] * len(os.listdir(path))
+                filtr    = [] * len(os.listdir(path))
+                comment  = [] * len(os.listdir(path))
+            else:
+                fileid   = []
+                objname  = []
+                obsvtype = []
+                filtr    = []
+                comment  = []
+
 
     # Open, read, and iterate over files ending with the .fits extension in inputted path.
     # Assign fits header key data to a variable and then append iteratively to respective empty list.
