@@ -127,6 +127,3 @@ def  reduc_tbl():
 
     dataframe.to_csv(path +  'observation_log.csv', columns = ['Filename',
         'Object_Name', 'Observation_Type', 'Filter', 'Comment'], index = None)
-
-
-
