@@ -4,6 +4,7 @@ import os
 
 
 def  reduc_tbl():
+
     '''
     This function iteratively opens and reads .fits files in a given directory
     and compiles a csv file containing the filename, target name, reduction
@@ -25,13 +26,11 @@ def  reduc_tbl():
     specified directory.
     '''
 
-    #**************************************************************************#
-
-
     # Prompt user input of directory path where files to be summarized are
     # located.
 
-    path = os.path.expanduser(raw_input('Please enter the path to .fits files: \n\n'))
+    path = os.path.expanduser(raw_input('Enter the path to .fits files: \n\n'))
+
 
 
     # Make sure pathname ends in '/' and if not then add on to the end of the
@@ -45,9 +44,9 @@ def  reduc_tbl():
     print(2*'\n\n' + path + 3*'\n\n')
 
 
+
     # Create empty lists for construction of data arrays by iterative appending.
     # Initialize lists in the event of processing a large volume of files.
-
 
     for fitsfile in os.listdir(path):
         if fitsfile[-5:] == '.fits':
@@ -65,10 +64,10 @@ def  reduc_tbl():
                 comment  = []
 
 
+
     # Open, read, and iterate over files ending with the .fits extension in
     # inputted path. Assign fits header key data to a variable and then append
-     # iteratively to respective empty list.
-
+    # iteratively to respective empty list.
 
     for fitsfile in os.listdir(path):
         if fitsfile[-5:] == '.fits':
@@ -112,12 +111,11 @@ def  reduc_tbl():
                 continue
 
 
-    print(fileid,objname,obsvtype,filtr,comment)
+    print(fileid, objname, obsvtype, filtr, comment)
 
 
     # Create an empty pandas dataframe object (data table) and assign populated
     # data lists to dataframd columns.
-
 
     dataframe = pd.DataFrame(data = None)
     dataframe['Filename']         = fileid
@@ -128,8 +126,7 @@ def  reduc_tbl():
     print(dataframe)
 
 
-    # Export compiled dataframe object to a .csv file in specified directory path.
-
+    # Export dataframe object to a .csv file in specified directory path.
 
     dataframe.to_csv(path +  'observation_log.csv', columns = ['Filename',
         'Object_Name', 'Observation_Type', 'Filter', 'Comment'], index = None)
