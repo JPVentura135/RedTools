@@ -21,8 +21,8 @@ def  reduc_tbl():
     ========
 
     - .CSV file containing the filename, target name, reduction variables
-      (bias and flat field) and observation filters for each .fits file within
-      specified directory.
+    (bias and flat field) and observation filters for each .fits file within
+    specified directory.
     '''
 
     #**************************************************************************#
