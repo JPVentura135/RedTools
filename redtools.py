@@ -117,12 +117,16 @@ def  reduc_tbl():
     # Create an empty pandas dataframe object (data table) and assign populated
     # data lists to dataframd columns.
 
-    dataframe = pd.DataFrame(data = None)
-    dataframe['Filename']         = fileid
-    dataframe['Object_Name']      = objname
-    dataframe['Observation_Type'] = obsvtype
-    dataframe['Filter']           = filtr
-    dataframe['Comment']          = comment
+    datatbl = list(zip(fileid, objname, obsvtype, filtr, comment))
+
+    def getKey(item):
+        return item[0]
+
+    datatbl = sorted(datatbl, key = getKey)
+
+    dataframe = pd.DataFrame(data = datatbl,columns = ['Filename','Object_Name',
+    'Observation_Type', 'Filter', 'Comment'])
+
     print(dataframe)
 
 
