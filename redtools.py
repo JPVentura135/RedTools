@@ -55,12 +55,14 @@ def  reduc_tbl():
                 objname  = [] * len(os.listdir(path))
                 obsvtype = [] * len(os.listdir(path))
                 filtr    = [] * len(os.listdir(path))
+                dimens   = [] * len(os.listdir(path))
                 comment  = [] * len(os.listdir(path))
             else:
                 fileid   = []
                 objname  = []
                 obsvtype = []
                 filtr    = []
+                dimens   = []
                 comment  = []
 
 
@@ -99,6 +101,12 @@ def  reduc_tbl():
                     print(filtr)
                     print('\n\n')
 
+                    dim         = zip(hdr.header['NAXIS'],
+                                      hdr.header['NAXIS1'])
+                    dimens.append(dim)
+                    print(dimens)
+                    print('\n\n')
+
                     comment.append(' ')
 
             except IOError:
@@ -117,20 +125,36 @@ def  reduc_tbl():
     # Create an empty pandas dataframe object (data table) and assign populated
     # data lists to dataframd columns.
 
-    datatbl = list(zip(fileid, objname, obsvtype, filtr, comment))
+    datatbl = list(zip(fileid, dimens, objname, obsvtype, filtr, comment))
 
     def getKey(item):
         return item[0]
 
     datatbl = sorted(datatbl, key = getKey)
 
-    dataframe = pd.DataFrame(data = datatbl,columns = ['Filename','Object_Name',
-    'Observation_Type', 'Filter', 'Comment'])
+    dataframe = pd.DataFrame(data = datatbl,columns = ['Filename', 'Dimensions'      , 'Object_Name','Observation_Type', 'Filter', 'Comment'])
 
     print(dataframe)
 
 
     # Export dataframe object to a .csv file in specified directory path.
 
-    dataframe.to_csv(path +  'observation_log.csv', columns = ['Filename',
-        'Object_Name', 'Observation_Type', 'Filter', 'Comment'], index = None)
+    dataframe.to_csv(path +  'observation_log.csv', columns = ['Filename'
+    , 'Image Dimensions', 'Object Name', 'Observation Type', 'Filter'
+    , 'Comment'],index = None)
+
+
+##def mbias(path2filename):
+#    '''
+#    This function creates a master bias frame for science image processing.
+#
+#    ==========
+#    Arguments:
+#    ==========
+#    Observation log path
+#
+#    ========
+#    Returns:
+#    ========
+#
+#    '''
