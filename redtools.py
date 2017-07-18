@@ -112,6 +112,7 @@ def  reduc_tbl():
             except IOError:
                 print(fitsfile + ' is a  ** Bad file ** \n\n')
                 fileid.append(str.format(fitsfile))
+                dimens.append(' N/A ')
                 objname.append(' N/A ')
                 obsvtype.append(' N/A ')
                 filtr.append(' N/A ')
@@ -119,7 +120,7 @@ def  reduc_tbl():
                 continue
 
 
-    print(fileid, objname, obsvtype, filtr, comment)
+    print(fileid,dimens, objname, obsvtype, filtr, comment)
 
 
     # Create an empty pandas dataframe object (data table) and assign populated
