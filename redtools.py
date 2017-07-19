@@ -3,9 +3,8 @@ import pandas as pd
 import os
 
 
-def  reduc_tbl():
-
-    '''
+def reduc_tbl():
+    """
     This function iteratively opens and reads .fits files in a given directory
     and compiles a csv file containing the filename, target name, reduction
     variables (bias and flat field) and observation filters for each file
@@ -24,8 +23,7 @@ def  reduc_tbl():
     - .CSV file containing the filename, target name, reduction variables
     (bias and flat field) and observation filters for each .fits file within
     specified directory.
-    '''
-
+    """
     # Prompt user input of directory path where files to be summarized are
     # located.
 
@@ -56,6 +54,7 @@ def  reduc_tbl():
                 obsvtype = [] * len(os.listdir(path))
                 filtr    = [] * len(os.listdir(path))
                 dimens   = [] * len(os.listdir(path))
+                overscan = [] * len(os.listdir(path))
                 comment  = [] * len(os.listdir(path))
             else:
                 fileid   = []
@@ -63,6 +62,7 @@ def  reduc_tbl():
                 obsvtype = []
                 filtr    = []
                 dimens   = []
+                overscan = []
                 comment  = []
 
 
@@ -74,7 +74,7 @@ def  reduc_tbl():
     for fitsfile in os.listdir(path):
         if fitsfile[-5:] == '.fits':
             try:
-                with fits.open(os.path.join(path,fitsfile)) as hdulist:
+                with fits.open(os.path.join(path, fitsfile)) as hdulist:
 
                     hdr = hdulist[0]
 
@@ -83,35 +83,40 @@ def  reduc_tbl():
 
                     filename    = hdr.header['FILENAME']
                     fileid.append(fitsfile)
-                    print(fitsfile)
-                    print('\n\n')
+                    #print(fitsfile)
+                    #print('\n\n')
 
                     object_name = hdr.header['OBJECT']
                     objname.append(object_name)
-                    print(object_name)
-                    print('\n\n')
+                    #print(object_name)
+                    #print('\n\n')
 
                     obsvtyp     = hdr.header['OBSTYPE']
                     obsvtype.append(obsvtyp)
-                    print(obsvtype)
-                    print('\n\n')
+                    #print(obsvtype)
+                    #print('\n\n')
 
                     filt        = hdr.header['FILTERS']
                     filtr.append(filt)
-                    print(filtr)
-                    print('\n\n')
+                    #print(filtr)
+                    #print('\n\n')
 
-                    dim         = zip(hdr.header['NAXIS'],
-                                      hdr.header['NAXIS1'])
+                    dim         = hdr.header['NAXIS1'], hdr.header['NAXIS2']
                     dimens.append(dim)
-                    print(dimens)
-                    print('\n\n')
+                    #print(dimens)
+                    #print('\n\n')
+
+                    oscan = hdr.header['BIASSEC']
+                    overscan.append(oscan)
+                    #print(overscan)
+                    #print('\n\n')
 
                     comment.append(' ')
 
             except IOError:
                 print(fitsfile + ' is a  ** Bad file ** \n\n')
                 fileid.append(str.format(fitsfile))
+                overscan.append(' N/A ')
                 dimens.append(' N/A ')
                 objname.append(' N/A ')
                 obsvtype.append(' N/A ')
@@ -119,14 +124,14 @@ def  reduc_tbl():
                 comment.append('Empty or corrupt FITS file.')
                 continue
 
-
-    print(fileid,dimens, objname, obsvtype, filtr, comment)
+    print(fileid, dimens, overscan, objname, obsvtype, filtr, comment)
 
 
     # Create an empty pandas dataframe object (data table) and assign populated
     # data lists to dataframd columns.
 
-    datatbl = list(zip(fileid, dimens, objname, obsvtype, filtr, comment))
+    datatbl = list(zip(fileid, dimens, overscan, objname, obsvtype, filtr,
+                       comment))
 
     def getKey(item):
         return item[0]
@@ -140,22 +145,6 @@ def  reduc_tbl():
 
     # Export dataframe object to a .csv file in specified directory path.
 
-    dataframe.to_csv(path +  'observation_log.csv', columns = ['Filename'
-    , 'Image Dimensions', 'Object Name', 'Observation Type', 'Filter'
-    , 'Comment'],index = None)
-
-
-##def mbias(path2filename):
-#    '''
-#    This function creates a master bias frame for science image processing.
-#
-#    ==========
-#    Arguments:
-#    ==========
-#    Observation log path
-#
-#    ========
-#    Returns:
-#    ========
-#
-#    '''
+    dataframe.to_csv(path +  'observation_log.csv', header = ['Filename'
+    , 'Image Dimensions', 'Overscan', 'Object Name', 'Observation Type',
+    'Filter', 'Comment'], index = None)
