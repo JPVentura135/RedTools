@@ -133,7 +133,7 @@ def  reduc_tbl():
 
     datatbl = sorted(datatbl, key = getKey)
 
-    dataframe = pd.DataFrame(data = datatbl,columns = ['Filename', 'Dimensions'      , 'Object_Name','Observation_Type', 'Filter', 'Comment'])
+    dataframe = pd.DataFrame(data = datatbl)
 
     print(dataframe)
 
