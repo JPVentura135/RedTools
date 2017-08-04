@@ -39,7 +39,7 @@ def reduc_tbl():
     else:
         path = path
 
-    print(2*'\n\n' + path + 3*'\n\n')
+    print(2*'\n\n' + path + 2*'\n\n')
 
 
 
@@ -50,19 +50,23 @@ def reduc_tbl():
         if fitsfile[-5:] == '.fits':
             if len(os.listdir(path)) > 200:
                 fileid   = [] * len(os.listdir(path))
+                dimens   = [] * len(os.listdir(path))
+                overscan = [] * len(os.listdir(path))
+                gain     = [] * len(os.listdir(path))
+                rdnoise  = [] * len(os.listdir(path))
                 objname  = [] * len(os.listdir(path))
                 obsvtype = [] * len(os.listdir(path))
                 filtr    = [] * len(os.listdir(path))
-                dimens   = [] * len(os.listdir(path))
-                overscan = [] * len(os.listdir(path))
                 comment  = [] * len(os.listdir(path))
             else:
                 fileid   = []
+                dimens   = []
+                overscan = []
+                gain     = []
+                rdnoise  = []
                 objname  = []
                 obsvtype = []
                 filtr    = []
-                dimens   = []
-                overscan = []
                 comment  = []
 
 
@@ -86,6 +90,26 @@ def reduc_tbl():
                     #print(fitsfile)
                     #print('\n\n')
 
+                    dim         = hdr.header['NAXIS1'], hdr.header['NAXIS2']
+                    dimens.append(dim)
+                    #print(dimens)
+                    #print('\n\n')
+
+                    oscan       = hdr.header['BIASSEC']
+                    overscan.append(oscan)
+                    #print(overscan)
+                    #print('\n\n')
+
+                    gainval     = hdr.header['GAIN']
+                    gain.append(gainval)
+                    #print(gain)
+                    #print('\n\n')
+
+                    readnoise   = hdr.header['RDNOISE']
+                    rdnoise.append(readnoise)
+                    #print(gain)
+                    #print('\n\n')
+
                     object_name = hdr.header['OBJECT']
                     objname.append(object_name)
                     #print(object_name)
@@ -101,16 +125,6 @@ def reduc_tbl():
                     #print(filtr)
                     #print('\n\n')
 
-                    dim         = hdr.header['NAXIS1'], hdr.header['NAXIS2']
-                    dimens.append(dim)
-                    #print(dimens)
-                    #print('\n\n')
-
-                    oscan = hdr.header['BIASSEC']
-                    overscan.append(oscan)
-                    #print(overscan)
-                    #print('\n\n')
-
                     comment.append(' ')
 
             except IOError:
@@ -118,20 +132,21 @@ def reduc_tbl():
                 fileid.append(str.format(fitsfile))
                 overscan.append(' N/A ')
                 dimens.append(' N/A ')
+                gain.append(' N/A ')
+                rdnoise.append(' N/A ')
                 objname.append(' N/A ')
                 obsvtype.append(' N/A ')
                 filtr.append(' N/A ')
                 comment.append('Empty or corrupt FITS file.')
                 continue
 
-    print(fileid, dimens, overscan, objname, obsvtype, filtr, comment)
+    print(fileid, dimens, overscan, gain, rdnoise, objname, obsvtype, filtr, comment)
 
 
     # Create an empty pandas dataframe object (data table) and assign populated
     # data lists to dataframd columns.
 
-    datatbl = list(zip(fileid, dimens, overscan, objname, obsvtype, filtr,
-                       comment))
+    datatbl = list(zip(fileid, dimens, overscan, gain, rdnoise, objname, obsvtype, filtr, comment))
 
     def getKey(item):
         return item[0]
@@ -145,6 +160,4 @@ def reduc_tbl():
 
     # Export dataframe object to a .csv file in specified directory path.
 
-    dataframe.to_csv(path +  'observation_log.csv', header = ['Filename'
-    , 'Image Dimensions', 'Overscan', 'Object Name', 'Observation Type',
-    'Filter', 'Comment'], index = None)
+    dataframe.to_csv(path +  'observation_log.csv', header = ['Filename', 'Image Dimensions', 'Overscan', 'Gain', 'Read Noise', 'Object Name', 'Observation Type', 'Filter', 'Comment'], index = None)
