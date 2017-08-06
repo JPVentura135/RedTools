@@ -82,56 +82,59 @@ def reduc_tbl():
 
                     hdr = hdulist[0]
 
-                    # Local fits file name is used here; filename list elements
-                    # not uniform across format.
+                    # Local fits file name is used here bc fits-key filename list elements not uniform in format.
 
-                    filename    = hdr.header['FILENAME']
-                    fileid.append(fitsfile)
-                    #print(fitsfile)
-                    #print('\n\n')
+                    # Try statement is used here to bypass files that dont have a fits-key 'FILENAME' eg an output file that was created like an avg bias frame or avg flat field.
+                    try:
+                        filename    = hdr.header['FILENAME']
+                        fileid.append(fitsfile)
+                        #print(fitsfile)
+                        #print('\n\n')
 
-                    dim         = hdr.header['NAXIS1'], hdr.header['NAXIS2']
-                    dimens.append(dim)
-                    #print(dimens)
-                    #print('\n\n')
+                        dim         = hdr.header['NAXIS1'], hdr.header['NAXIS2']
+                        dimens.append(dim)
+                        #print(dimens)
+                        #print('\n\n')
 
-                    oscan       = hdr.header['BIASSEC']
-                    overscan.append(oscan)
-                    #print(overscan)
-                    #print('\n\n')
+                        oscan       = hdr.header['BIASSEC']
+                        overscan.append(oscan)
+                        #print(overscan)
+                        #print('\n\n')
 
-                    gainval     = hdr.header['GAIN']
-                    gain.append(gainval)
-                    #print(gain)
-                    #print('\n\n')
+                        gainval     = hdr.header['GAIN']
+                        gain.append(gainval)
+                        #print(gain)
+                        #print('\n\n')
 
-                    readnoise   = hdr.header['RDNOISE']
-                    rdnoise.append(readnoise)
-                    #print(gain)
-                    #print('\n\n')
+                        readnoise   = hdr.header['RDNOISE']
+                        rdnoise.append(readnoise)
+                        #print(gain)
+                        #print('\n\n')
 
-                    object_name = hdr.header['OBJECT']
-                    objname.append(object_name)
-                    #print(object_name)
-                    #print('\n\n')
+                        object_name = hdr.header['OBJECT']
+                        objname.append(object_name)
+                        #print(object_name)
+                        #print('\n\n')
 
-                    obsvtyp     = hdr.header['OBSTYPE']
-                    obsvtype.append(obsvtyp)
-                    #print(obsvtype)
-                    #print('\n\n')
+                        obsvtyp     = hdr.header['OBSTYPE']
+                        obsvtype.append(obsvtyp)
+                        #print(obsvtype)
+                        #print('\n\n')
 
-                    filt        = hdr.header['FILTERS']
-                    filtr.append(filt)
-                    #print(filtr)
-                    #print('\n\n')
+                        filt        = hdr.header['FILTERS']
+                        filtr.append(filt)
+                        #print(filtr)
+                        #print('\n\n')
 
-                    comment.append(' ')
+                        comment.append(' ')
+                    except KeyError:
+                        continue
 
             except IOError:
                 print(fitsfile + ' is a  ** Bad file ** \n\n')
                 fileid.append(str.format(fitsfile))
-                overscan.append(' N/A ')
                 dimens.append(' N/A ')
+                overscan.append(' N/A ')
                 gain.append(' N/A ')
                 rdnoise.append(' N/A ')
                 objname.append(' N/A ')
